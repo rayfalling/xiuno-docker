@@ -1,0 +1,51 @@
+version: '3.4'
+services:
+    nginx:
+        image: nginx:latest
+        # 端口映射
+        ports:
+            - "8080:80"
+        # 依赖关系 先跑php
+        depends_on:
+            - "php-fpm"
+        # 数据卷
+        volumes:
+            # 映射主机./conf.d目录到容器/etc/nginx/conf.d目录
+            - "$PWD/nginx:/etc/nginx/conf.d"
+            - "$PWD/xiuno:/var/www/html"
+        networks:
+            - xiuno_net
+        # 容器名称
+        container_name: "xiuno-nginx"
+    php-fpm:
+        build: ./php-fpm
+        # image指定build Dockerfile生成镜像的名称
+        image: php:latest-fpm-mysqli
+        ports:
+            - "9000:9000"
+        volumes:
+            - "$PWD/xiuno:/var/www/html"
+        networks:
+            - xiuno_net
+        container_name: "xiuno-php-fpm"
+    mysql:
+        image: mysql:latest
+        ports:
+            - "3306:3306"
+        # 环境变量
+        environment:
+            # mysql密码
+            - MYSQL_ROOT_PASSWORD="9bae532d-5ade-4655-bfeb-6e7e9c1976d1"
+            - MYSQL_USER="xiuno"
+            - MYSQL_PASS="neupioneer@xiuno"
+        networks:
+            xiuno_net:               
+                ipv4_address: 10.10.100.1
+        container_name: "xiuno-mysql"
+networks:
+    # 配置docker network
+    xiuno_net:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.10.0.0/16
