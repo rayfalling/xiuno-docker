@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /admin
-Disallow: /user-*
-Disallow: /serach-*

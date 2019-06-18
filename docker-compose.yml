@@ -41,9 +41,11 @@ services:
             - MYSQL_ROOT_PASSWORD
             - MYSQL_USER
             - MYSQL_PASSWORD
+        volumes:
+            - "$PWD/mysql/data:/var/lib/mysql"
         networks:
             xiuno_net:               
-                ipv4_address: MYSQL_SERVER_ADDRESS
+                ipv4_address: $MYSQL_SERVER_ADDRESS
         container_name: "xiuno-mysql"
 networks:
     # 配置docker network
