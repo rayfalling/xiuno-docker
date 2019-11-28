@@ -1,4 +1,4 @@
-FROM mysql:latest
+FROM mysql:5.7
 MAINTAINER rayfalling <wanghaiwe.i.1999@163.com>
 
 RUN mkdir -p /var/log/mysql
